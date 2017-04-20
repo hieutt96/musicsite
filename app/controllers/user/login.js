@@ -53,12 +53,12 @@ let login = (req, res) => {
             return res.status(500).json({ errCode: 500, msg: 'Internal error' });
         }
         if (user) {
-            if (user.isBlock === 0) {
-                return res.status(413).json({ errCode: -3, msg: 'Access Denied' });
+            if (user.isBlock === 1) {
+                return res.status(413).json({ errCode: -5, msg: 'Access Denied' });
             }
             if (!user.comparePassword(password)) {
                 // Password mismatch
-                return res.status(400).json({ errCode: -4, msg: 'Password mismatch' });
+                return res.status(400).json({ errCode: -6, msg: 'Password mismatch' });
             }
 
             user.toJSON((err, userJSON) => {
@@ -88,7 +88,7 @@ let login = (req, res) => {
 
                 if (!user.comparePassword(password)) {
                     // Password mismatch
-                    return res.status(400).json({ errCode: -4, msg: 'Password mismatch' });
+                    return res.status(400).json({ errCode: -6, msg: 'Password mismatch' });
                 }
                 user.toJSON((err, userJSON) => {
                     if (err) {

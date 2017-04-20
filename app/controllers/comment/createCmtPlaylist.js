@@ -3,16 +3,16 @@ const CommentPlaylist = require(global.__base + 'app/models/cmtPlaylist.js');
 
 let createCmtPlaylist = (req, res) => {
     let info = {
-        userId: req.session.userId,
+        userId: req.user.userId,
         playlistId: req.body.playlistId,
         contents: req.body.contents,
         dateTime: new Date()
     }
     if (info.userId === null || info.userId === undefined) {
-        return res.status(404).json({ errCode: -4, msg: 'Not found User!' });
+        return res.status(404).json({ errCode: -3, msg: 'Not found User!' });
     }
     if (info.contents === null) {
-        return res.status(400).json({ errCode: -2, msg: 'Comment is empty!' });
+        return res.status(400).json({ errCode: -1, msg: 'Comment is empty!' });
     } else {
         let newCmt = new CommentPlaylist(info);
         newCmt.save((err) => {

@@ -1,5 +1,5 @@
 const pool = require(global.__base + 'app/config/database/mysql/pool');
-
+const Song = require(global.__base + 'app/models/song.js');
 class Playlist {
     constructor(props) {
         this._playlistId = props.playlistId;
@@ -53,71 +53,60 @@ class Playlist {
     //Tìm theo tên trả về nhiều kết quả
 
     static findByName(name, callback) {
-        pool.getConnection((err, connection) => {
+        let query = 'select * from playlist where name = ?';
+        pool.query(query, [name], (err, results) => {
             if (err) return callback(err);
-            let query = 'select * from playlist where name = ?';
-            connection.query(query, [name], (err, results) => {
-                connection.release();
-                if (err) return callback(err);
-                if (!results[0]) return callback(null, null);
-                let data = [];
-                results.forEach(function(item) {
-                    data.push(new Playlist(item));
-                });
-                callback(null, data);
+            if (!results[0]) return callback(null, null);
+            let data = [];
+            results.forEach(function(item) {
+                data.push(new Playlist(item));
             });
+            callback(null, data);
         });
     }
 
     // Tìm kiếm bằng type, có thể trả về nhiều kết quả
     static findByType(type, callback) {
-        pool.getConnection((err, connection) => {
+        let query = 'select * from playlist where type = ?';
+        pool.query(query, [type], (err, resutls) => {
             if (err) return callback(err);
-            let query = 'select * from playlist where type = ?';
-            connection.query(query, [type], (err, resutls) => {
-                connection.release();
-                if (err) return callback(err);
-                if (!results[0]) return callback(null, null);
-                let data = [];
-                results.forEach(function(item) {
-                    data.push(new Playlist(item));
-                });
-                callback(null, data);
+            if (!results[0]) return callback(null, null);
+            let data = [];
+            results.forEach(function(item) {
+                data.push(new Playlist(item));
             });
+            callback(null, data);
         });
     }
 
     //Tìm kiếm bằng ID người dùng sở hữu playlist, trả về nhiều kết quả
 
     static findByUserId(id, callback) {
-        pool.getConnection((err, connection) => {
+        let query = 'select * from playlist where userId = ?';
+        pool.query(query, [id], (err, results) => {
             if (err) return callback(err);
-            let query = 'select * from playlist where userId = ?';
-            connection.query(query, [id], (err, results) => {
-                connection.release();
-                if (err) return callback(err);
-                if (!results[0]) return callback(null, null);
-                let data = [];
-                results.forEach(function(item) {
-                    data.push(new Playlist(item));
-                });
-                callback(null, data);
+            if (!results[0]) return callback(null, null);
+            let data = [];
+            results.forEach(function(item) {
+                data.push(new Playlist(item));
             });
+            callback(null, data);
         });
+
     }
 
-    static addSong(songId, playlistName, callback) {
+    static addSong(songId, playlistName, order, callback) {
         pool.getConnection((err, connection) => {
             if (err) return callback(err);
             let query = "select * from playlist where name = ?";
-            connection.query(query, [playlistName], (err, results) => {
+            connection.query(query, [playlistName, userId], (err, results) => {
                 if (err) return callback(err);
                 else {
                     console.log(results);
                     let info = {
                         songId: songId,
                         playlistId: results[0].playlistId,
-                        order: 1
+                        order: order
                     };
                     let query = "insert into song_in_playlist set ?";
                     connection.query(query, [info], (err, results) => {
@@ -133,12 +122,15 @@ class Playlist {
         });
 
     }
-    static removeSong(songId, playlistId, callback) {
+    static removeSong(songId, playlistId, userId, callback) {
         pool.getConnection((err, connection) => {
             if (err) return callback(err);
-            let query = 'select * from song_in_playlist where songId = ? and playlistId = ?';
-            connection.query(query, [songId, playlistId], (err, results) => {
-                if (err) return callback(err);
+            let query = 'select * from song_in_playlist where songId = ? and playlistId = ? and order = ? ';
+            connection.query(query, [songId, playlistId, userId], (err, results) => {
+                if (err) {
+                    connection.release();
+                    return callback(err);
+                }
                 if (results) {
                     let query = "delete from song_in_playlist where songId = ? and playlistId = ?";
                     connection.query(query, [songId, playlistId], (err, results) => {
@@ -152,16 +144,13 @@ class Playlist {
 
         });
     }
-    static deletePlaylist(playlistId, callback) {
-        pool.getConnection((err, connection) => {
+    static deletePlaylist(playlistId, userId, callback) {
+        let query = 'delete from playlist where playlistId = ? and userId = ?';
+        pool.query(query, [playlistId, userId], (err, results) => {
             if (err) return callback(err);
-            let query = 'delete from playlist where playlistId = ?';
-            connection.query(query, [playlistId], (err, results) => {
-                connection.release();
-                if (err) return callback(err);
-                else return callback(null, results);
-            });
+            else return callback(null, results);
         });
+
     }
 
 

@@ -26,7 +26,7 @@ let login = (req, res) => {
         if (admin) {
             if (!admin.comparePassword(password)) {
                 return res.status(400).json({
-                    errCode: -4,
+                    errCode: -6,
                     msg: "Password mismatch"
                 })
             }
@@ -63,10 +63,10 @@ let login = (req, res) => {
                     });
                 }
                 if (!admin.comparePassword(password)) {
-                    return res.status(400).json({ errCode: -4, msg: 'Password mismatch' });
+                    return res.status(400).json({ errCode: -6, msg: 'Password mismatch' });
 
                 }
-                admin.toJSON((err, adminJSON) => {
+                admin.toJSOn((err, adminJSON) => {
                     if (err) {
                         console.log(err);
                         return res.status(500).json({
