@@ -84,5 +84,5 @@ router.post('/find', songController.findAll);
 router.get('/play/:songId', songController.stream);
 
 //Get video by id
-router.get('/mp4/:videoId', songController.getById);
+router.get('/mp4/:videoId', songController.getVideoId);
 module.exports = router;

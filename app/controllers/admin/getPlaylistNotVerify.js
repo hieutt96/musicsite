@@ -1,4 +1,4 @@
-const Playlist = require(global._base + 'app/models/playlist.js');
+const Playlist = require(global.__base + 'app/models/playlist.js');
 const Admin = require(global.__base + 'app/models/playlist.js');
 
 let GetVer = (req, res) => {
