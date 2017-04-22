@@ -34,6 +34,14 @@ class Zone {
     toJSON(callback) {
         return callback(null, this.rawData());
     }
+    static findById(zoneId, callback) {
+        let query = 'select * from zone where zoneId = ?';
+        pool.query(query, [zoneId], (err, result) => {
+            if (err) return callback(err);
+            let zone = new Zone(result[0]);
+            return callback(null, zone);
+        });
+    }
 
 
 }

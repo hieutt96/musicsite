@@ -28,7 +28,7 @@ router.post('/upload', deserializeUser, isUser, upload.single("file"), songContr
 
 
 //Xóa một bài hát, chỉ có user hoặc admin mới có quyền
-router.delete('/delete', deserialize, isAuthenticated, songController.delete);
+router.post('/delete', deserialize, isAuthenticated, songController.delete);
 
 
 //Trả về một bài hát bằng ID

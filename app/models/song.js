@@ -96,12 +96,7 @@ class Song {
     }
 
     toJSON(callback) {
-        let obj = new Object;
-        Author.find(39, obj, (err, author) => {
-            return null;
-        });
-        console.log(obj);
-        return callback(null, {
+        let resData = {
             songId: this.songId,
             name: this.name,
             description: this.description,
@@ -110,10 +105,47 @@ class Song {
             type: this.type,
             listen: this.listen,
             download: this.download,
-            userId: this.userId,
-            zoneId: this.zoneId,
-            categoryId: this.categoryId,
-            authorId: obj.author
+            author: [],
+            artist: [],
+            userId: [],
+            zone: [],
+            category: []
+        };
+        Author.findById(this.authorId, (err, author) => {
+            if (err) return callback(err);
+            author.toJSON((err, authorJSON) => {
+                resData.author.push(authorJSON);
+                Artist.findBySongId(this.songId, (err, artist) => {
+                    if (err) return callback(err);
+                    artist.forEach(function(item) {
+                        item.toJSON((err, artistJSON) => {
+                            resData.artist.push(artistJSON);
+                        });
+                    });
+                    User.findById(this.userId, (err, user) => {
+                        if (err) return callback(err);
+                        user.toJSON((err, userJSON) => {
+                            resData.userId.push(userJSON);
+                            Zone.findById(this.zoneId, (err, zone) => {
+                                if (err) return callback(err);
+                                zone.toJSON((err, zoneJSON) => {
+                                    if (err) return callback(err);
+                                    resData.zone.push(zoneJSON);
+                                    Category.findById(this.categoryId, (err, category) => {
+                                        if (err) return callback(err);
+                                        category.toJSON((err, categoryJSON) => {
+                                            if (err) return callback(err);
+                                            resData.category.push(categoryJSON);
+                                            return callback(null, resData);
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+
         });
     }
 

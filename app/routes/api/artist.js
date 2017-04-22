@@ -14,6 +14,7 @@ var storage = multer.diskStorage({
     }
 });
 var upload = multer({ storage: storage });
+//Tạo playlist 
 router.post('/create', deserializeUser, isUser, upload.single("file"), artistController.newArtist);
 router.post('/find/name', artistController.getArtistName);
 router.post('/find/type', artistController.getArtistType);

@@ -49,12 +49,14 @@ let upload = (req, res) => {
                                     console.log(err);
                                     return res.status(500).json({ errCode: 500, msg: 'Internal error' });
                                 }
-                                newSong.toJSON((err, newSongJSON) => {
-                                    let resData = { song: newSongJSON };
-                                    newSong.savePresent(newSongJSON.songId, artist.artistId, (err) => {
+                                newSong.savePresent(newSong.songId, artist.artistId, (err) => {
+                                    if (err) return res.json({ errCode: 500, msg: "Internal error" });
+                                    newSong.toJSON((err, newSongJSON) => {
                                         if (err) return res.json({ errCode: 500, msg: 'Internal error' });
+                                        let resData = { song: newSongJSON };
+                                        return res.json({ errCode: 0, msg: 'Success', data: resData });
                                     });
-                                    return res.json({ errCode: 0, msg: 'Success', data: resData });
+
 
                                 })
                             });
@@ -94,12 +96,12 @@ let upload = (req, res) => {
                                             console.log(err);
                                             return res.status(500).json({ errCode: 500, msg: 'Internal error' });
                                         }
-                                        newSong.toJSON((err, newSongJSON) => {
-                                            let resData = { song: newSongJSON };
-                                            newSong.savePresent(newSongJSON.songId, newArtistJSON.artistId, (err) => {
+                                        newSong.savePresent(newSong.songId, newArtistJSON.artistId, (err) => {
+                                            newSong.toJSON((err, newSongJSON) => {
                                                 if (err) return res.json({ errCode: 500, msg: 'Internal error' });
+                                                let resData = { song: newSongJSON };
+                                                return res.json({ errCode: 0, msg: 'Success', data: resData });
                                             });
-                                            return res.json({ errCode: 0, msg: 'Success', data: resData })
 
                                         })
                                     });
@@ -147,12 +149,14 @@ let upload = (req, res) => {
                                             console.log(err);
                                             return res.status(500).json({ errCode: 500, msg: 'Internal error' });
                                         }
-                                        newSong.toJSON((err, newSongJSON) => {
-                                            let resData = { song: newSongJSON };
-                                            newSong.savePresent(newSongJSON.songId, artist.artistId, (err) => {
+                                        newSong.savePresent(newSong.songId, artist.artistId, (err) => {
+                                            if (err) return res.json({ errCode: 500, msg: "Internal error" });
+                                            newSong.toJSON((err, newSongJSON) => {
+                                                let resData = { song: newSongJSON };
                                                 if (err) return res.json({ errCode: 500, msg: 'Internal error' });
+                                                return res.json({ errCode: 0, msg: 'Success', data: resData })
+
                                             });
-                                            return res.json({ errCode: 0, msg: 'Success', data: resData })
 
                                         })
                                     });
@@ -203,11 +207,12 @@ let upload = (req, res) => {
                                             let newSong = new Song(info);
                                             newSong.save((err) => {
                                                 if (err) return res.status(500).json({ errCode: 500, msg: 'Internal error' });
-                                                newSong.toJSON((err, newSongJSON) => {
+                                                newSong.savePresent(newSong.songId, newArtistJSON.artistId, (err) => {
                                                     if (err) return res.status(500).json({ errCode: 500, msg: 'Internal error' });
-                                                    newSong.savePresent(newSongJSON.songId, newArtistJSON.artistId, (err) => {
+                                                    newSong.toJSON((err, newSongJSON) => {
+                                                        let resData = { song: newSongJSON };
                                                         if (err) return res.status(500).json({ errCode: 500, msg: 'Internal error' });
-                                                        return res.status(200).json({ errCode: 0, msg: 'Success', data: { song: newSongJSON } });
+                                                        return res.status(200).json({ errCode: 0, msg: 'Success', data: resData });
                                                     });
                                                 });
                                             });
