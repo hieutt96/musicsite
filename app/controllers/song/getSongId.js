@@ -13,7 +13,7 @@ let getSongId = (req, res) => {
             console.log(song);
             song.toJSON((err, songJSON) => {
                 let resData = { song: songJSON };
-                return res.status(200).json({ errCode: 200, msg: 'Success', data: resData });
+                return res.status(200).json({ errCode: 0, msg: 'Success', data: resData });
             });
         }
     });
