@@ -176,18 +176,7 @@ class Admin {
             return callback(null);
         });
     }
-    static getPlaylistNotVerify(callback) {
-        let query = 'select * from playlist where isVerify = 1';
-        pool.query(query, [], (err, results) => {
-            if (err) return callback(err);
-            if (!results) return callback(null);
-            let data = [];
-            results.forEach(function(item) {
-                data.push(new Playlist(item));
-            });
-            callback(null, data);
-        });
-    }
+
 
 }
 module.exports = Admin;

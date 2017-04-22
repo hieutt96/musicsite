@@ -119,7 +119,18 @@ class Song {
 
     //Tìm kiếm bằng ID, chỉ trả về một kết quả
     static findById(id, callback) {
-        let query = 'select * from song where songId= ?';
+            let query = 'select * from song where songId= ? and type = 1';
+            pool.query(query, [id], (err, results) => {
+                if (err) return callback(err);
+                if (!results[0]) return callback(null, null);
+                let song = new Song(results[0]);
+                return callback(null, song);
+            });
+
+        }
+        //Tìm kiếm video bằng id
+    static findVideoById(id, callback) {
+        let query = 'select * from song where songId= ? and type = 2';
         pool.query(query, [id], (err, results) => {
             if (err) return callback(err);
             if (!results[0]) return callback(null, null);

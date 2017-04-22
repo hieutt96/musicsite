@@ -25,4 +25,10 @@ router.delete('/remove', deserializeUser, isUser, playlistController.remove);
 
 //Delete 1 playlist
 router.delete('/delete', deserializeUser, isUser, playlistController.delete);
+
+//get By ID
+router.get('/:id', playlistController.getByID);
+
+//get all playlist
+router.get('/', playlistController.getAll);
 module.exports = router;

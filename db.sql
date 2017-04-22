@@ -115,14 +115,12 @@ alter table `playlist`
     add constraint `playlist_userId` foreign key (`userId`) references `user`(`userId`) on delete cascade;
 
 alter table `comment_song`
-    add constraint `comment_song_commentId` foreign key (`commentId`) references `comment`(`commentId`) on delete cascade,
     add constraint `comment_song_userId` foreign key (`userId`) references `user`(`userId`) on delete cascade,
     add constraint `comment_song_songId` foreign key (`songId`) references `song`(`songId`) on delete cascade;
 
 alter table `comment_playlist`
-    add constraint `comment_playlist_commentId` foreign key (`commentId`) references `comment`(`commentId`) on delete cascade,
+    add constraint `comment_playlist_commentId` foreign key (`playlistId`) references `playlist`(`playlistId`) on delete cascade,
     add constraint `comment_playlist_userId` foreign key (`userId`) references `user`(`userId`) on delete cascade,
-    add constraint `comment_playlist_playlistId` foreign key (`playlistId`) references `playlist`(`playlistId`) on delete cascade;
 
 alter table `present` 
     add constraint `present_songId` foreign key (`songId`) references `song`(`songId`) on delete cascade,

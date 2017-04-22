@@ -17,6 +17,7 @@ const download = require(global.__base + 'app/controllers/song/download.js');
 const stream = require(global.__base + 'app/controllers/song/stream.js');
 const rank = require(global.__base + 'app/controllers/song/getRank.js');
 const findAll = require(global.__base + 'app/controllers/song/findAll.js');
+const getVideoId = require(global.__base + 'app/controllers/song/getVideoId.js');
 const songController = {
     upload: upload,
     stream: stream,
@@ -25,6 +26,7 @@ const songController = {
     rank: rank,
     findAll: findAll,
     getSongId: getSongId,
+    getVideoId: getVideoId,
     getSongAuthor: getSongAuthor,
     getSongByName: getSongByName,
     getSongByArtist: getSongByArtist,

@@ -52,7 +52,13 @@ class Playlist {
 
     // Tìm theo ID
     static findById(id, callback) {
+            let query = 'select * from playlist where playlistId = ?';
+            pool.query(query, [id], (err, results) => {
+                if (err) return callback(err);
+                if (!results[0]) return callback(null, null);
+                callback(null, new Playlist(results[0]));
 
+            });
         }
         //Tìm theo tên trả về nhiều kết quả
 
@@ -162,6 +168,17 @@ class Playlist {
             if (err) return callback(err);
             if (!results) return callback(null);
             let data = [];
+            results.forEach(function(item) {
+                data.push(new Playlist(item));
+            });
+            callback(null, data);
+        });
+    }
+    static findAll(callback) {
+        let query = 'select * from playlist';
+        pool.query(query, [], (err, results) => {
+            if (err) return callback(err);
+            if (!results) return callback(null, null);
             results.forEach(function(item) {
                 data.push(new Playlist(item));
             });
