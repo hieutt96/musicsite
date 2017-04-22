@@ -2,7 +2,7 @@ const Song = require(global.__base + 'app/models/song.js');
 
 // Hàm truy vấn trên nhiều trường
 let findAll = (req, res) => {
-    Song.find(req.body, (err, info) => {
+    Song.find(req.body, req.body.page, (err, info) => {
         if (err) {
             console.log(err);
             return res.status(500).json({ errCode: 500, msg: 'Internall error' });

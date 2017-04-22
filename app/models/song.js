@@ -1,5 +1,10 @@
 const pool = require(global.__base + 'app/config/database/mysql/pool');
-
+const Artist = require(global.__base + 'app/models/artist.js');
+const Author = require(global.__base + 'app/models/author.js');
+const User = require(global.__base + 'app/models/user.js');
+const Zone = require(global.__base + 'app/models/zone.js');
+const Category = require(global.__base + 'app/models/category.js');
+const PAGE_LENGTH = 5;
 class Song {
 
     constructor(props) {
@@ -91,7 +96,25 @@ class Song {
     }
 
     toJSON(callback) {
-        return callback(null, this.rawData());
+        let obj = new Object;
+        Author.find(39, obj, (err, author) => {
+            return null;
+        });
+        console.log(obj);
+        return callback(null, {
+            songId: this.songId,
+            name: this.name,
+            description: this.description,
+            dateTime: this.dateTime,
+            link: this.link,
+            type: this.type,
+            listen: this.listen,
+            download: this.download,
+            userId: this.userId,
+            zoneId: this.zoneId,
+            categoryId: this.categoryId,
+            authorId: obj.author
+        });
     }
 
     //Tìm kiếm bằng ID, chỉ trả về một kết quả
@@ -299,7 +322,7 @@ class Song {
         });
     }
 
-    static find(queryObj, callback) {
+    static find(queryObj, page, callback) {
         let tableList = ['artist', 'present', 'author', 'song'];
         let jsonConditions = ['song.songId = present.songId', 'present.artistId = artist.artistId', 'song.authorId = author.authorId'];
         let queryList = [];
@@ -340,6 +363,10 @@ class Song {
             queryList.push('author.name = ?');
             valueList.push(queryObj.authorName);
         }
+        if (queryObj.type) {
+            queryList.push(' song.type = ? ');
+            valueList.push(queryObj.type);
+        }
         let orderBy = ' song.songId';
         let sort = ' DESC';
         switch (queryObj.orderBy) {
@@ -364,10 +391,12 @@ class Song {
 
         let query = 'SELECT *, artist.name as singer, author.name as author FROM ' + tableList.join(', ') + ' WHERE ' + jsonConditions.join(' AND ');
         if (queryList.length === 0) {
-            query += ' ORDER BY' + orderBy + sort;
+            query += ' ORDER BY' + orderBy + sort + ' LIMIT ? OFFSET ?';
         } else {
-            query += ' AND ' + queryList.join(' AND') + ' ORDER BY ' + orderBy + sort;
+            query += ' AND ' + queryList.join(' AND') + ' ORDER BY ' + orderBy + sort + ' LIMIT ? OFFSET ?';
         }
+        valueList.push(PAGE_LENGTH);
+        valueList.push(page * PAGE_LENGTH);
         console.log(query);
         console.log(valueList);
         pool.query(query, valueList, (err, results) => {

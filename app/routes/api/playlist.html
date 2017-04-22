@@ -1,7 +1,9 @@
 <html>
-<form action="/api/playlist/create" method="post">
-    <input type="text" name="playlistName">
-    <input type="text" name="description">
+<form enctype="multipart/form-data" action="/api/playlist/create" method="post">
+    Name: <input type="text" name="playlistName"> Description:
+    <input type="text" name="description"> Type:
+    <input type="text" name="type"> Cover:
+    <input id="file" type="file" name="file" /><br/>
     <button type="submit">OK</button>
 </form>
 

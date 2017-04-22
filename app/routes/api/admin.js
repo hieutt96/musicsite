@@ -18,5 +18,8 @@ router.get('/alluser', deserializeAdmin, isAdmin, adminController.getUser);
 router.get('/listen', deserializeAdmin, isAdmin, adminController.getListen);
 //Trả về tất cả bài hát/video có trong hệ thống theo lượt tải giảm dần
 router.get('/download', deserializeAdmin, isAdmin, adminController.getDownload);
-
+//Trả về các playlist chưa được verify
+router.get('/notverify', deserializeAdmin, isAdmin, adminController.getPlaylistNotVerify);
+// Xác nhận playlist, put cái playlistId đến địa chỉ này
+router.put('/verify', deserializeAdmin, isAdmin, adminController.verify);
 module.exports = router;

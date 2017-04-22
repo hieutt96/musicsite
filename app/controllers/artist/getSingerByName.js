@@ -22,14 +22,14 @@ let getSingerName = (req, res) => {
                     errCode: 500,
                     msg: "Internal error"
                 });
-                resData = { artist: artistJSON }
+                resData = { artist: artistJSON };
+                return res.status(200).json({
+                    errCode: 0,
+                    msg: 'Success',
+                    data: resData
+                })
             });
 
-            return res.status(200).json({
-                errCode: 0,
-                msg: 'Success',
-                data: resData
-            })
         }
     })
 }

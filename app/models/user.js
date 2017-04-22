@@ -15,6 +15,7 @@ class User {
         this._livingIn = props.livingIn;
         this._gender = props.gender;
         this._isBlock = props.isBlock;
+        this._avatar = props.avatar;
         if (props.encryptedPassword) {
             this._password = props.encryptedPassword;
         } else {
@@ -30,6 +31,7 @@ class User {
     get livingIn() { return this._livingIn; }
     get gender() { return this._gender; }
     get isBlock() { return this._isBlock; }
+    get avatar() { return this._avatar; }
     rawData() {
         return {
             userId: this.userId,
@@ -39,7 +41,8 @@ class User {
             birthday: this.birthday,
             livingIn: this.livingIn,
             gender: this.gender,
-            isBlock: this.isBlock
+            isBlock: this.isBlock,
+            avatar: this.avatar
         };
     }
 

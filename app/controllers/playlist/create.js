@@ -1,8 +1,7 @@
 const Playlist = require(global.__base + 'app/models/playlist.js');
 
 let createPlaylist = (req, res) => {
-
-
+    console.log(req.file.path);
     Playlist.findByName(req.body.name, (err, playlist) => {
 
         if (err) {
@@ -10,6 +9,9 @@ let createPlaylist = (req, res) => {
         }
         if (playlist) {
             return res.status(400).json({ errCode: -2, msg: "Playlist already exists" });
+        }
+        if (req.file.mimetype !== 'png' || req.file.mimetype !== 'jpg' || req.file.mimetype !== 'jpeg') {
+            res.status(415).json({ errCode: -7, msg: 'Unsupported Media Type ' });
         } else {
 
             let info = {
@@ -18,7 +20,8 @@ let createPlaylist = (req, res) => {
                 type: req.body.type,
                 isVerify: req.body.type === 0 ? true : false,
                 dateTime: new Date(),
-                userId: req.user.userId
+                userId: req.user.userId,
+                cover: req.file.path
             }
             let newPlaylist = new Playlist(info);
             newPlaylist.save((err) => {

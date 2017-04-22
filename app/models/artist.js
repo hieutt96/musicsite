@@ -8,19 +8,21 @@ class Artist {
         this._name = props.name;
         this._type = props.type;
         this._description = props.description;
+        this._avatar = props.avatar;
     }
 
     get artistId() { return this._artistId; }
     get name() { return this._name; }
     get type() { return this._type; }
     get description() { return this._description; }
-
+    get avatar() { return this._avatar; }
     rawData() {
         return {
             artistId: this.artistId,
             name: this.name,
             type: this.type,
-            description: this.description
+            description: this.description,
+            avatar: this.avatar
         }
     }
 

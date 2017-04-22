@@ -1,5 +1,5 @@
 const Song = require(global.__base + 'app/models/song.js');
-
+const Artist = require(global.__base + 'app/models/song.js');
 let getSongId = (req, res) => {
     let id = req.params.songId;
     Song.findById(id, (err, song) => {

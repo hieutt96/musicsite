@@ -6,7 +6,8 @@ let createArtist = (req, res) => {
     let info = {
         name: name,
         type: req.body.type,
-        description: req.body.description
+        description: req.body.description,
+        avatar: req.body.path
     }
     Artist.findByName(info.name, (err, artist) => {
         if (err) return res.status(500).json({ errCode: 500, msg: "Internal error" });

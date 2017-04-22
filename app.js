@@ -39,6 +39,9 @@ app.use('/song', song);
 app.get('/', (req, res) => {
     res.sendFile(global.__base + 'app/routes/api/index.html');
 });
+app.get('/signup', (req, res) => {
+    res.sendFile(global.__base + 'app/routes/api/user.html');
+});
 app.get('/u', (req, res) => {
     res.sendFile(global.__base + 'app/routes/api/index1.html');
 });
