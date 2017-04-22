@@ -14,7 +14,7 @@ var fs = require('fs');
 var multer = require('multer');
 var storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, './upload');
+        cb(null, './upload/song');
     },
     filename: function(req, file, cb) {
         cb(null, file.originalname);
@@ -32,7 +32,7 @@ router.delete('/delete', deserialize, isAuthenticated, songController.delete);
 
 
 //Trả về một bài hát bằng ID
-router.get('/:songId', songController.getSongId);
+router.get('/mp3/:songId', songController.getSongId);
 
 
 //Trả về bài hát bằng tên tác giả
@@ -82,4 +82,7 @@ router.post('/find', songController.findAll);
 
 //Stream file
 router.get('/play/:songId', songController.stream);
+
+//Get video by id
+router.get('/mp4/:videoId', songController.getById);
 module.exports = router;

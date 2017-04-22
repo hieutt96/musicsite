@@ -9,6 +9,7 @@ class Playlist {
         this._isVerify = props.isVerify;
         this._dateTime = props.dateTime;
         this._userId = props.userId;
+        this._cover = props.cover;
     }
     get playlistId() { return this._playlistId; }
     get name() { return this._name; }
@@ -17,7 +18,7 @@ class Playlist {
     get isVerify() { return this._isVerify; }
     get dateTime() { return this._dateTime; }
     get userId() { return this._userId; }
-
+    get cover() { return this._cover; }
 
     rawData() {
         return {
@@ -27,7 +28,8 @@ class Playlist {
             type: this.type,
             isVerify: this.isVerify,
             dateTime: this.dateTime,
-            userId: this.userId
+            userId: this.userId,
+            cover: this.cover
         }
     }
 
@@ -48,9 +50,17 @@ class Playlist {
         return callback(null, this.rawData());
     }
 
-    // Chắc ko thằng nào tìm đc playlist bằng ID đâu nên làm tìm bằng tên thôi
+    // Tìm theo ID
+    static findById(id, callback) {
+            let query = 'select * from playlist where playlistId = ?';
+            pool.query(query, [id], (err, results) => {
+                if (err) return callback(err);
+                if (!results[0]) return callback(null, null);
+                callback(null, new Playlist(results[0]));
 
-    //Tìm theo tên trả về nhiều kết quả
+            });
+        }
+        //Tìm theo tên trả về nhiều kết quả
 
     static findByName(name, callback) {
         let query = 'select * from playlist where name = ?';
@@ -151,6 +161,29 @@ class Playlist {
             else return callback(null, results);
         });
 
+    }
+    static getPlaylistNotVerify(callback) {
+        let query = 'select * from playlist where isVerify = 1';
+        pool.query(query, [], (err, results) => {
+            if (err) return callback(err);
+            if (!results) return callback(null);
+            let data = [];
+            results.forEach(function(item) {
+                data.push(new Playlist(item));
+            });
+            callback(null, data);
+        });
+    }
+    static findAll(callback) {
+        let query = 'select * from playlist';
+        pool.query(query, [], (err, results) => {
+            if (err) return callback(err);
+            if (!results) return callback(null, null);
+            results.forEach(function(item) {
+                data.push(new Playlist(item));
+            });
+            callback(null, data);
+        });
     }
 
 

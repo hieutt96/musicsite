@@ -158,16 +158,25 @@ class Admin {
         });
     }
     static getDownload(callback) {
-        let query = 'select * from song order by song.download desc';
-        pool.query(query, [], (err, results) => {
-            if (err) {
-                console.log(err);
-                return callback(err);
-            } else {
-                return callback(null, results);
-            }
+            let query = 'select * from song order by song.download desc';
+            pool.query(query, [], (err, results) => {
+                if (err) {
+                    console.log(err);
+                    return callback(err);
+                } else {
+                    return callback(null, results);
+                }
+            });
+        }
+        //Hàm xác nhận playlist là album, post cái playlistId lên
+    static verify(playlistId, callback) {
+        let query = 'update playlist set isVerify = 0 where playlistId = ?';
+        pool.query(query, [playlistId], (err, results) => {
+            if (err) return callback(err);
+            return callback(null);
         });
     }
+
 
 }
 module.exports = Admin;

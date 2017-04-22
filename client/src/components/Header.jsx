@@ -4,9 +4,10 @@ import SecondNavbar from './SecondNavbar';
 
 class Header extends React.Component {
 	render() {
+		console.log('Render Header')
 		return (
 			<div className="Header">
-				<TopNavbar doLogout={this.props.doLogout}/>
+				<TopNavbar />
 				<SecondNavbar />
 			</div>
 		);

@@ -23,4 +23,14 @@ class Admin extends React.Component {
 	}
 }
 
-export default Admin;
+import { connect } from 'react-redux';
+import { doLogout } from '../../actions/admin';
+
+export default connect(
+	(state) => ({
+		// Map state to props
+	}), {
+		// Map dispatch to props
+		doLogout: () => doLogout
+	}
+)(Admin);

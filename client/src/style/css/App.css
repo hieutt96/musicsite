@@ -5,11 +5,15 @@
 .App {
   margin: 0;
   font-family: 'Sansita';
+  background-color: white;
   color: #555;
   font-size: 15px;
   padding: 10px 30px; }
   .App .Header .TopNavbar .navbar {
     margin-bottom: 0px; }
+  .App .Header .TopNavbar .navbar-default {
+    background-color: white;
+    background-image: none; }
   .App .Header .SecondNavbar .navbar {
     background-image: linear-gradient(to bottom, #fff 0%, #fff 100%); }
   .App .SongPlayer {
@@ -60,6 +64,8 @@
     .App .SongPlayer_Control div:hover {
       color: #337ab7;
       cursor: pointer; }
+    .App .SongPlayer_Control audio {
+      display: none; }
     .App .SongPlayer_Control .SongPlayer_Control_Progress .SongPlayer_Control_ProgressFull {
       position: absolute;
       top: 0;
@@ -129,6 +135,12 @@
     .App .VideoPlayer video {
       position: relative;
       width: 100%; }
+  .App .MVList .MVCover {
+    float: left; }
+  .App .MVList:after {
+    content: '';
+    clear: both;
+    display: block; }
   .App .MVCover {
     position: relative;
     width: 190px;

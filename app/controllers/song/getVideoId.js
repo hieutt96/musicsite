@@ -1,22 +1,20 @@
 const Song = require(global.__base + 'app/models/song.js');
-const Artist = require(global.__base + 'app/models/song.js');
-let getSongId = (req, res) => {
-    let id = req.params.songId;
-    Song.findById(id, (err, song) => {
+
+let getVideoId = (req, res) => {
+    let id = req.params.videoId;
+    Song.getVideoById(req.params.id, (err, video) => {
         if (err) {
             console.log(err);
             return res.status(500).json({ errCode: 500, msg: 'Internal error' });
         }
-        if (!song) {
+        if (!video) {
             return res.status(404).json({ errCode: -3, msg: 'Not found' });
         } else {
-            console.log(song);
-            song.toJSON((err, songJSON) => {
-                let resData = { song: songJSON };
+            video.toJSON((err, videoJSON) => {
+                let resData = { video: videoJSON };
                 return res.status(200).json({ errCode: 200, msg: 'Success', data: resData });
             });
         }
-    });
+    })
 }
-
-module.exports = getSongId;
+module.exports = getVideoId;

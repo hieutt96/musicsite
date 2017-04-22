@@ -40,16 +40,15 @@ class Author {
         // Tìm kiếm bằng ID, trả về 1 kết quả
 
     static findById(id, callback) {
-        let query = 'select * from author where authorId = ?';
-        pool.query(query, [id], (err, results) => {
-            if (err) return callback(err);
-            if (!results[0]) return callback(null, null);
-            return callback(null, new Author(results[0]));
-        });
+            let query = 'select * from author where authorId = ?';
+            pool.query(query, [id], (err, results) => {
+                if (err) return callback(err);
+                if (!results[0]) return callback(null, null);
+                return callback(null, new Author(results[0]));
+            });
 
-    }
-
-    //Tìm theo tên, có thể trả về nhiều kết quả
+        }
+        //Tìm theo tên, có thể trả về nhiều kết quả
     static findByName(name, callback) {
         let query = 'select * from author where name = ?';
         pool.query(query, [name], (err, results) => {
@@ -62,6 +61,15 @@ class Author {
             callback(null, data);
         });
 
+    }
+    static find(authorId, obj, callback) {
+        let query = 'select * from author where authorId = ?';
+        pool.query(query, [authorId], (err, results) => {
+            if (err) throw err;
+            if (!results[0]) return null;
+            obj.author = new Author(results[0]);
+            return callback(null, obj);
+        });
     }
 
 

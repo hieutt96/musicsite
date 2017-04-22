@@ -5,14 +5,17 @@ import { syncHistoryWithStore } from 'react-router-redux';
 import { Provider } from 'react-redux';
 import App from './App';
 
-import Home from './containers/Home';
-import Signup from './containers/Signup';
-import Login from './containers/Login';
+import Main from './components/Main';
+import Home from './components/Home';
+import Signup from './components/Signup';
+import Login from './components/Login';
 import Dash from './components/Dash';
+import SongPlayer from './components/SongPlayer';
+import VideoPlayer from './components/VideoPlayer';
 
-import Admin from './containers/admin/Admin';
+import Admin from './components/admin/Admin';
 import AdminDash from './components/admin/Dash';
-import AdminLogin from './containers/admin/Login';
+import AdminLogin from './components/admin/Login';
 
 import store from './store/config';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -39,18 +42,20 @@ ReactDOM.render(
 	<Provider store={store}>
 		<Router history={history}>
 			<Route path="/" component={App}>
-				<IndexRedirect to="home"/>
-				<Route path="signup" component={Signup} />
-				<Route path="login" component={Login} />
-				<Route path="home" component={Home} />
-				<Route path="user" component={Dash} />
+				<Route path="" component={Main}>
+					<IndexRedirect to="home" />
+					<Route path="signup" component={Signup} />
+					<Route path="login" component={Login} />
+					<Route path="home" component={Home} />
+					<Route path="user" component={Dash} />
+					<Route path="song/:songId" component={SongPlayer} />
+					<Route path="video/:songId" component={VideoPlayer} />
+					<Route path="playlist/:playlistId" component={SongPlayer} />
+				</Route>
+				<Route path="/admin" component={Admin} onEnter={checkAdminLogin}>
+					<Route path="login" component={AdminLogin} />
+				</Route>
 			</Route>
-			<Route path="/admin" component={Admin} onEnter={checkAdminLogin}>
-				{/* <IndexRoute component={AdminDash} /> 
-				<IndexRedirect to="dash" />
-				<Route path="dash" component={AdminDash} />*/}
-			</Route>
-			<Route path="/admin/login" component={AdminLogin} />
 		</Router>
 	</Provider>,
   document.getElementById('root')

@@ -55,6 +55,7 @@ let signup = (req, res) => {
         return res.status(400).json({ errCode: -1, msg: 'Invalid date format' });
     }
     // Check district exist
+    console.log(req.file.path);
     let info = {
         username: req.body.username,
         email: req.body.email,
@@ -63,7 +64,8 @@ let signup = (req, res) => {
         birthday: moment(req.body.birthday).format('YYYY-MM-DD'),
         livingIn: req.body.livingIn,
         gender: req.body.gender === 'Nam' ? 0 : 1,
-        isBlock: 1
+        isBlock: 0,
+        avatar: req.file.path
     };
     // Check user exist
     User.findByUsername(info.username, (err, user) => {

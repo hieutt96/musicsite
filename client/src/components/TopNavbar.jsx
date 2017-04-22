@@ -64,4 +64,15 @@ class TopNavbar extends React.Component {
   }
 }
 
-export default TopNavbar;
+import { connect } from 'react-redux';
+import { doLogout } from '../actions/logout';
+
+export default connect(
+  (state) => ({
+    // Map state to props
+    status: state.logout.status
+  }), {
+    // Map dispatch to props
+    doLogout: () => doLogout
+  }
+)(TopNavbar);
