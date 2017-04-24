@@ -119,25 +119,44 @@ class User {
     }
 
     static findByUsername(username, callback) {
-        pool.getConnection((err, conn) => {
-            if (err) { return callback(err); }
+            pool.getConnection((err, conn) => {
+                if (err) { return callback(err); }
 
-            let query = 'SELECT * FROM `user` WHERE username = ?';
-            conn.query(query, [username], (err, rows) => {
-                conn.release();
+                let query = 'SELECT * FROM `user` WHERE username = ?';
+                conn.query(query, [username], (err, rows) => {
+                    conn.release();
+                    if (err) return callback(err);
+
+                    if (!rows[0]) {
+                        return callback(null, null);
+                    }
+
+                    let info = Object.assign({}, rows[0], {
+                        encryptedPassword: rows[0].password,
+                        birthday: moment(rows[0].birthday).format('YYYY-MM-DD')
+                    });
+                    let user = new User(info);
+                    return callback(null, user);
+                });
+            });
+        }
+        //Find avatar
+    static findAva(userId, callback) {
+            let query = 'select avatar from user where userId = ?';
+            pool.query(query, [userId], (err, results) => {
                 if (err) return callback(err);
-
-                if (!rows[0]) {
-                    return callback(null, null);
+                else {
+                    return callback(null, results[0]);
                 }
 
-                let info = Object.assign({}, rows[0], {
-                    encryptedPassword: rows[0].password,
-                    birthday: moment(rows[0].birthday).format('YYYY-MM-DD')
-                });
-                let user = new User(info);
-                return callback(null, user);
             });
+        }
+        //Update user
+    static updateUser(user, callback) {
+        let query = "update user set username = ?, password = ?, displayName = ?, birthday = ?, livingIn = ?,avatar = ? where userId = ?";
+        pool.query(query, [user.username, user.password, user.displayName, user.birthday, user.livingIn, user.avatar, user.userId], (err, results) => {
+            if (err) return callback(err);
+            return callback(null, null);
         });
     }
 }
