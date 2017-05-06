@@ -119,8 +119,8 @@ alter table `comment_song`
     add constraint `comment_song_songId` foreign key (`songId`) references `song`(`songId`) on delete cascade;
 
 alter table `comment_playlist`
+    add constraint `comment_playlist_commentId` foreign key (`playlistId`) references `playlist`(`playlistId`) on delete cascade,
     add constraint `comment_playlist_userId` foreign key (`userId`) references `user`(`userId`) on delete cascade,
-    add constraint `comment_playlist_playlistId` foreign key (`playlistId`) references `playlist`(`playlistId`) on delete cascade;
 
 alter table `present` 
     add constraint `present_songId` foreign key (`songId`) references `song`(`songId`) on delete cascade,
@@ -133,3 +133,8 @@ alter table `song_in_playlist`
 alter table song add column link varchar(128);
 alter table `user` add column gender tinyint ;
 alter table user add column isBlock boolean default true;
+--
+alter table user add column avatar varchar(128);
+alter table playlist add column cover varchar(128);
+alter table artist add column avatar varchar(128);
+alter table author add column avatar varchar(128);

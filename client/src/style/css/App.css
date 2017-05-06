@@ -71,26 +71,30 @@
       top: 0;
       left: 0%;
       width: 100%;
-      z-index: 1;
+      z-index: 2;
       background-color: slategray;
       padding: 0;
       height: 7px; }
+    .App .SongPlayer_Control .SongPlayer_Control_Progress .SongPlayer_Control_ProgressFull:hover {
+      top: -1px;
+      height: 9px; }
     .App .SongPlayer_Control .SongPlayer_Control_Progress .SongPlayer_Control_ProgressPass {
       position: absolute;
       top: 0;
       left: 0%;
-      width: 30%;
       z-index: 2;
       background-color: dodgerblue;
       padding: 0;
       height: 7px; }
+    .App .SongPlayer_Control .SongPlayer_Control_Progress .SongPlayer_Control_ProgressPass:hover {
+      top: -1px;
+      height: 9px; }
     .App .SongPlayer_Control .SongPlayer_Control_Progress .SongPlayer_Control_ProgressHolder {
       width: 15px;
       height: 15px;
       position: absolute;
       bottom: 4px;
       padding: 0;
-      left: 30%;
       background: #fff;
       z-index: 3;
       border-radius: 7px;
@@ -122,6 +126,54 @@
       color: #999; }
     .App .SongPlayer_Control .SongPlayer_Control_Volume {
       float: right; }
+      .App .SongPlayer_Control .SongPlayer_Control_Volume .SongPlayer_Control_VolumeChooser {
+        position: absolute;
+        left: 5px;
+        width: 20px;
+        height: 100px;
+        top: -90px;
+        border-left: 1px solid #aaa;
+        border-right: 1px solid #aaa;
+        border-top: 1px solid #aaa;
+        z-index: 5;
+        background-color: #fff; }
+        .App .SongPlayer_Control .SongPlayer_Control_Volume .SongPlayer_Control_VolumeChooser .SongPlayer_Control_VolumeFull {
+          position: absolute;
+          left: 6px;
+          width: 5px;
+          height: 100%;
+          background-color: slategray; }
+        .App .SongPlayer_Control .SongPlayer_Control_Volume .SongPlayer_Control_VolumeChooser .SongPlayer_Control_VolumeSlide {
+          position: absolute;
+          left: 6px;
+          width: 5px;
+          height: 51%;
+          background-color: dodgerblue;
+          /* top: 69px; */
+          bottom: 0px; }
+        .App .SongPlayer_Control .SongPlayer_Control_Volume .SongPlayer_Control_VolumeChooser .SongPlayer_Control_VolumeHolder {
+          width: 15px;
+          height: 15px;
+          position: absolute;
+          bottom: 51%;
+          padding: 0;
+          background: #fff;
+          z-index: 3;
+          border-radius: 7px;
+          -moz-border-radius: 7px;
+          -webkit-border-radius: 7px;
+          margin-bottom: -3px;
+          overflow: hidden;
+          /* margin-left: -7px; */
+          -webkit-transition: opacity 0.2s linear, height 0.2s linear, margin-bottom 0.2s linear;
+          -moz-transition: opacity 0.2s linear, height 0.2s linear, margin-bottom 0.2s linear;
+          transition: opacity 0.2s linear, height 0.2s linear, margin-bottom 0.2s linear;
+          opacity: 1;
+          background: -webkit-linear-gradient(to bottom, #FFFFFF 0%, #ECECEC 100%);
+          background: -moz-linear-gradient(to bottom, #FFFFFF 0%, #ECECEC 100%);
+          background: -o-linear-gradient(to bottom, #FFFFFF 0%, #ECECEC 100%);
+          background: -ms-linear-gradient(to bottom, #FFFFFF 0%, #ECECEC 100%);
+          background: linear-gradient(to bottom, #FFFFFF 0%, #ECECEC 100%); }
     .App .SongPlayer_Control .SongPlayer_Control_Random {
       float: right; }
     .App .SongPlayer_Control .SongPlayer_Control_Download {

@@ -15,8 +15,9 @@ export const doLogout = (dispatch, getState) => {
 			dispatch(setStatus('Error'))
 		}
 		console.log(response);
-		localStorage.removeItem('user');
 		dispatch(setStatus('Logout success'));
+		localStorage.removeItem('user');
 		hashHistory.push('/home');
+		dispatch(setStatus(''));
 	});
 }

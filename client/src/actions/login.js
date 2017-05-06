@@ -32,10 +32,10 @@ export const doLogin = (dispatch, getState) => {
 			return dispatch(setStatus('Error'));
 		}
 		if (response.errCode === 0) {
-			dispatch(setStatus('Logged in as ' + response.data.user.username));
-			dispatch(clearInfo());
 			localStorage.setItem('user', JSON.stringify(response.data.user));
+			dispatch(setStatus('Logged in as ' + response.data.user.username));
 			hashHistory.push('/');
+			dispatch(clearInfo());
 		} else {
 			dispatch(setStatus('Login failed'));
 		}

@@ -2,6 +2,7 @@
 
 const pool = require(global.__base + 'app/config/database/mysql/pool');
 const bcrypt = require('bcrypt-nodejs');
+const PAGE_LENGTH = 10;
 
 class Admin {
 
@@ -135,39 +136,55 @@ class Admin {
         });
     }
 
-    static getUser(callback) {
-        let query = 'select * from user';
-        pool.query(query, [], (err, results) => {
+    static getUser(page, callback) {
+
+        const User = require(global.__base + 'app/models/user');
+
+        let query = 'select * from user ORDER BY userId DESC LIMIT ? OFFSET ?';
+        pool.query(query, [PAGE_LENGTH, page * PAGE_LENGTH], (err, rows) => {
             if (err) {
                 console.log(err);
                 return callback(err);
-            } else {
-                return callback(null, results);
             }
-        });
-    }
-    static getListen(callback) {
-        let query = 'select * from song order by song.listen desc';
-        pool.query(query, [], (err, results) => {
-            if (err) {
-                console.log(err);
-                return callback(err);
-            } else {
-                return callback(null, results);
-            }
-        });
-    }
-    static getDownload(callback) {
-            let query = 'select * from song order by song.download desc';
-            pool.query(query, [], (err, results) => {
-                if (err) {
-                    console.log(err);
-                    return callback(err);
-                } else {
-                    return callback(null, results);
-                }
+            let result = [];
+            rows.forEach((row, i) => {
+                result.push(new User(row));
             });
-        }
+            return callback(null, result);
+        });
+    }
+    static getListen(page, callback) {
+        const Song = require(global.__base + 'app/models/song');
+
+        let query = 'select * from song order by song.listen desc LIMIT ? OFFSET ?';
+        pool.query(query, [PAGE_LENGTH, page * PAGE_LENGTH], (err, rows) => {
+            if (err) {
+                console.log(err);
+                return callback(err);
+            } 
+            let result = [];
+            rows.forEach((row, i) => {
+                result.push(new Song(row));
+            });
+            return callback(null, result);
+        });
+    }
+    static getDownload(page, callback) {
+        const Song = require(global.__base + 'app/models/song');
+        
+        let query = 'select * from song order by song.download desc LIMIT ? OFFSET ?';
+        pool.query(query, [PAGE_LENGTH, page * PAGE_LENGTH], (err, rows) => {
+            if (err) {
+                console.log(err);
+                return callback(err);
+            } 
+            let result = [];
+            rows.forEach((row, i) => {
+                result.push(new Song(row));
+            });
+            return callback(null, result);
+        });
+    }
         //Hàm xác nhận playlist là album, post cái playlistId lên
     static verify(playlistId, callback) {
         let query = 'update playlist set isVerify = 0 where playlistId = ?';

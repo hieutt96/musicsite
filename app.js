@@ -34,7 +34,7 @@ const apiRouter = require(global.__base + 'app/routes/api/index');
 const song = require(global.__base + 'app/routes/index/song.js');
 app.use('/api', apiRouter);
 app.use('/song', song);
-
+app.use('/upload', express.static('upload'));
 // Test stream audio/video
 app.get('/', (req, res) => {
     res.sendFile(global.__base + 'app/routes/api/index.html');

@@ -70,17 +70,32 @@ class Artist {
     //Tìm kiếm theo type, trả về nhiều kết quả
 
     static findByType(type, callback) {
-        let query = 'select * from artist where type = ?';
-        pool.query(query, [type], (err, results) => {
-            if (err) return callback(err);
-            if (!results[0]) return callback(null, null);
-            let data = [];
-            results.forEach(function(item) {
-                data.push(new Artist(item));
+            let query = 'select * from artist where type = ?';
+            pool.query(query, [type], (err, results) => {
+                if (err) return callback(err);
+                if (!results[0]) return callback(null, null);
+                let data = [];
+                results.forEach(function(item) {
+                    data.push(new Artist(item));
+                });
+                return callback(null, data);
             });
-            callback(null, data);
-        });
 
+        }
+        //Tìm kiếm ca sĩ hát 1 bài hát có ID = ?
+    static findBySongId(songId, callback) {
+        let query = 'select artist.* from song, present, artist where song.songId = present.songId and present.artistId = artist.artistId and song.songId = ?';
+        pool.query(query, [songId], (err, results) => {
+            if (err) return callback(err);
+            if (!results[0]) return callback(null);
+            else {
+                let data = [];
+                results.forEach(function(item) {
+                    data.push(new Artist(item));
+                });
+                return callback(null, data);
+            }
+        });
     }
 
 

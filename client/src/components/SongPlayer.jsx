@@ -21,7 +21,7 @@ class SongPlayer extends React.Component {
 	compareAndGetSong(songId) {
 		let currSong = this.props.currentList[0];
 		if (!currSong || songId != currSong.songId) {
-			getJSON('/api/song/' + songId, (err, status, response) => {
+			getJSON('/api/song/mp3/' + songId, (err, status, response) => {
 				if (err) {
 					console.log(err);
 				}
@@ -56,24 +56,23 @@ class SongPlayer extends React.Component {
 		this.compareAndGetSong(songId);
 	}
 
-	
-
 	render() {
 		let songs = this.props.currentList;
 		if (!songs) {
 			return null;
 		} 
 		let currSong = songs[0];
+		console.log(currSong)
 		if (!currSong || currSong.songId != this.props.params.songId) {
 			return <div>{this.state.status}</div>;
 		} else {
 			return (
 				<div className="SongPlayer">
-					<div>SongPlayer</div>
-					<div>{this.state.status}</div>
+					{/*<div>SongPlayer</div>
+					<div>{this.state.status}</div>*/}
 					<div className="SongPlayer_MainScreen">
 						<div className="SongPlayer_MainScreen_Cover">
-							<img src={currSong.cover} alt="img" />
+							<img src="music.png" alt="img" />
 						</div>
 						<div className="SongPlayer_MainScreen_Lyric">
 							<div>Lyric</div>
@@ -91,7 +90,7 @@ class SongPlayer extends React.Component {
 						<SongItem />
 					</div>
 					<audio controls>
-					  <source src="1.mp3" type="audio/mpeg" />
+					  <source src={currSong.link} type="audio/mpeg" />
 					Your browser does not support the audio element.
 					</audio>
 				</div>
@@ -102,7 +101,7 @@ class SongPlayer extends React.Component {
 
 // export default SongPlayer;
 import { connect } from 'react-redux';
-import { listenSong, playVideo, listenPlaylist, getSong, clearCurrentList, setCurrentList } from '../actions/listen';
+import { clearCurrentList, setCurrentList } from '../actions/listen';
 
 export default connect(
 	(state) => ({

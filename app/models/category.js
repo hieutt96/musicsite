@@ -32,6 +32,15 @@ class Category {
     toJSON(callback) {
             return callback(null, this.rawData());
         }
+        //Tìm kiếm bằng ID
+    static findById(categoryId, callback) {
+            let query = 'select * from category where categoryId = ?';
+            pool.query(query, [categoryId], (err, result) => {
+                if (err) return callback(err);
+                let category = new Category(result[0]);
+                return callback(null, category);
+            });
+        }
         // Tìm kiếm theo tên, trả về nhiều kết quả
     static findbyName(name, callback) {
         let query = 'select * from category where name = ?';

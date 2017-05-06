@@ -17,7 +17,7 @@ var storage = multer.diskStorage({
         cb(null, './upload/song');
     },
     filename: function(req, file, cb) {
-        cb(null, file.originalname);
+        cb(null, Date.now() + "_" + file.originalname);
     }
 });
 
@@ -25,64 +25,40 @@ var upload = multer({ storage: storage });
 
 //Tạo bài hát mới
 router.post('/upload', deserializeUser, isUser, upload.single("file"), songController.upload);
-
-
 //Xóa một bài hát, chỉ có user hoặc admin mới có quyền
-router.delete('/delete', deserialize, isAuthenticated, songController.delete);
-
-
+router.post('/delete', deserialize, isAuthenticated, songController.delete);
 //Trả về một bài hát bằng ID
 router.get('/mp3/:songId', songController.getSongId);
-
-
-//Trả về bài hát bằng tên tác giả
-router.post('/find/author', songController.getSongAuthor);
-
-
-//Trả về bài hát bằng tên 
-router.post('/find/name', songController.getSongByName);
-
-
-//Trả về bài hát bằng tên ca sĩ
-router.post('/find/artist', songController.getSongByArtist);
-
-
-//Trả về thông tin về sự biểu diễn bài hát ( bao gồm bài hát + ca sĩ trình diễn)
-router.post('/find/perform', songController.getPresent);
-
-
-//Trả về thông tin bài hát từ category
-router.post('/find/category', songController.getSongByCategory);
-
-
-//Trả về thông tin bài hát từ zone
-router.post('/find/zone', songController.getSongByZone);
-
-
-//Trả về thông tin bài hát từ type
-router.post('/find/type', songController.getSongByType);
-
-//Trả về danh sách bài hát ở một playlist
-router.post('/find/playlist', songController.getSongPlaylist);
-
+//Get all
+router.post('/find', songController.findAll);
+//Stream file
+router.get('/play/:songId', songController.stream);
+//Get video by id
+router.get('/mp4/:videoId', songController.getVideoId);
 //Cập nhật lượt nghe bài hát
 router.put('/update/listen', songController.updateListening);
-
 //Cập nhật lượt tải của bài hát
 router.put('/update/download', songController.updateDownload);
-
 //Download bài hát
 router.get('/download/:id', songController.download);
-
 //Get bảng xếp hạng
 router.get('/rank/:type', songController.rank);
 
-//Get all
-router.post('/find', songController.findAll);
+//Trả về bài hát bằng tên tác giả
+router.post('/find/author', songController.getSongAuthor);
+//Trả về bài hát bằng tên 
+router.post('/find/name', songController.getSongByName);
+//Trả về bài hát bằng tên ca sĩ
+router.post('/find/artist', songController.getSongByArtist);
+//Trả về thông tin về sự biểu diễn bài hát ( bao gồm bài hát + ca sĩ trình diễn)
+router.post('/find/perform', songController.getPresent);
+//Trả về thông tin bài hát từ category
+router.post('/find/category', songController.getSongByCategory);
+//Trả về thông tin bài hát từ zone
+router.post('/find/zone', songController.getSongByZone);
+//Trả về thông tin bài hát từ type
+router.post('/find/type', songController.getSongByType);
+//Trả về danh sách bài hát ở một playlist
+router.post('/find/playlist', songController.getSongPlaylist);
 
-//Stream file
-router.get('/play/:songId', songController.stream);
-
-//Get video by id
-router.get('/mp4/:videoId', songController.getById);
 module.exports = router;

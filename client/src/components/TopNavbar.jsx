@@ -23,6 +23,7 @@ class TopNavbar extends React.Component {
     );
     try {
       this.user = JSON.parse(localStorage.getItem('user'));
+      console.log('This user: ', this.user)
       if (!this.user) {
         rightNavbar = notLoggedIn;
       } else {
@@ -70,7 +71,8 @@ import { doLogout } from '../actions/logout';
 export default connect(
   (state) => ({
     // Map state to props
-    status: state.logout.status
+    logoutStatus: state.logout.status,
+    loginStatus: state.login.status
   }), {
     // Map dispatch to props
     doLogout: () => doLogout

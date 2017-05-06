@@ -4,7 +4,7 @@ const Author = require(global.__base + 'app/models/author.js');
 const User = require(global.__base + 'app/models/user.js');
 const Zone = require(global.__base + 'app/models/zone.js');
 const Category = require(global.__base + 'app/models/category.js');
-const PAGE_LENGTH = 5;
+const PAGE_LENGTH = 10;
 class Song {
 
     constructor(props) {
@@ -89,19 +89,11 @@ class Song {
                 callback(null);
 
             });
-
         });
-
-
     }
 
     toJSON(callback) {
-        let obj = new Object;
-        Author.find(39, obj, (err, author) => {
-            return null;
-        });
-        console.log(obj);
-        return callback(null, {
+        let resData = {
             songId: this.songId,
             name: this.name,
             description: this.description,
@@ -110,10 +102,130 @@ class Song {
             type: this.type,
             listen: this.listen,
             download: this.download,
-            userId: this.userId,
-            zoneId: this.zoneId,
-            categoryId: this.categoryId,
-            authorId: obj.author
+            author: {},
+            artists: [],
+            user: {},
+            zone: {},
+            category: {}
+        };
+
+        Author.findById(this.authorId, (err, author) => {
+            if (err) return callback(err);
+            if (author) {
+                author.toJSON((err, authorJSON) => {
+                    resData.author = authorJSON;
+                    Artist.findBySongId(this.songId, (err, artist) => {
+                        if (err) return callback(err);
+                        if (artist) {
+                            artist.forEach(function(item) {
+                                item.toJSON((err, artistJSON) => {
+                                    resData.artists.push(artistJSON);
+                                });
+                            });
+                            User.findById(this.userId, (err, user) => {
+                                if (err) return callback(err);
+                                user.toJSON((err, userJSON) => {
+                                    resData.user = userJSON;
+                                    Zone.findById(this.zoneId, (err, zone) => {
+                                        if (err) return callback(err);
+                                        zone.toJSON((err, zoneJSON) => {
+                                            if (err) return callback(err);
+                                            resData.zone = zoneJSON;
+                                            Category.findById(this.categoryId, (err, category) => {
+                                                if (err) return callback(err);
+                                                category.toJSON((err, categoryJSON) => {
+                                                    if (err) return callback(err);
+                                                    resData.category = categoryJSON;
+                                                    return callback(null, resData);
+                                                });
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        } else {
+                            User.findById(this.userId, (err, user) => {
+                                if (err) return callback(err);
+                                user.toJSON((err, userJSON) => {
+                                    resData.user = userJSON;
+                                    Zone.findById(this.zoneId, (err, zone) => {
+                                        if (err) return callback(err);
+                                        zone.toJSON((err, zoneJSON) => {
+                                            if (err) return callback(err);
+                                            resData.zone = zoneJSON;
+                                            Category.findById(this.categoryId, (err, category) => {
+                                                if (err) return callback(err);
+                                                category.toJSON((err, categoryJSON) => {
+                                                    if (err) return callback(err);
+                                                    resData.category = categoryJSON;
+                                                    return callback(null, resData);
+                                                });
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        }
+                    });
+                });
+            } else {
+                author.toJSON((err, authorJSON) => {
+                    resData.author = authorJSON;
+                    Artist.findBySongId(this.songId, (err, artist) => {
+                        if (err) return callback(err);
+                        if (artist) {
+                            artist.forEach(function(item) {
+                                item.toJSON((err, artistJSON) => {
+                                    resData.artists.push(artistJSON);
+                                });
+                            });
+                            User.findById(this.userId, (err, user) => {
+                                if (err) return callback(err);
+                                user.toJSON((err, userJSON) => {
+                                    resData.user = userJSON;
+                                    Zone.findById(this.zoneId, (err, zone) => {
+                                        if (err) return callback(err);
+                                        zone.toJSON((err, zoneJSON) => {
+                                            if (err) return callback(err);
+                                            resData.zone = zoneJSON;
+                                            Category.findById(this.categoryId, (err, category) => {
+                                                if (err) return callback(err);
+                                                category.toJSON((err, categoryJSON) => {
+                                                    if (err) return callback(err);
+                                                    resData.category = categoryJSON;
+                                                    return callback(null, resData);
+                                                });
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        } else {
+                            User.findById(this.userId, (err, user) => {
+                                if (err) return callback(err);
+                                user.toJSON((err, userJSON) => {
+                                    resData.user = userJSON;
+                                    Zone.findById(this.zoneId, (err, zone) => {
+                                        if (err) return callback(err);
+                                        zone.toJSON((err, zoneJSON) => {
+                                            if (err) return callback(err);
+                                            resData.zone = zoneJSON;
+                                            Category.findById(this.categoryId, (err, category) => {
+                                                if (err) return callback(err);
+                                                category.toJSON((err, categoryJSON) => {
+                                                    if (err) return callback(err);
+                                                    resData.category = categoryJSON;
+                                                    return callback(null, resData);
+                                                });
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        }
+                    });
+                });
+            }
         });
     }
 
@@ -334,8 +446,8 @@ class Song {
     }
 
     static find(queryObj, page, callback) {
-        let tableList = ['artist', 'present', 'author', 'song'];
-        let jsonConditions = ['song.songId = present.songId', 'present.artistId = artist.artistId', 'song.authorId = author.authorId'];
+        let tableList = ['author', 'song'];
+        let joinConditions = ['song.authorId = author.authorId'];
         let queryList = [];
         let valueList = [];
         if (queryObj.songId) {
@@ -348,29 +460,33 @@ class Song {
         }
         if (queryObj.userId) {
             tableList.push('user');
-            jsonConditions.push('song.userId = user.userid');
+            joinConditions.push('song.userId = user.userid');
             queryList.push('user.userid = ?');
             valueList.push(queryObj.userId);
         }
         if (queryObj.artistName) {
+            tableList.push('artist');
+            tableList.push('present');
+            joinConditions.push('present.artistId = artist.artistId');
+            joinConditions.push('song.songId = present.songId');
             queryList.push('artist.name = ?');
             valueList.push(queryObj.artistName);
         }
         if (queryObj.zoneName) {
             tableList.push('zone');
-            jsonConditions.push('song.zoneId = zone.zoneId');
+            joinConditions.push('song.zoneId = zone.zoneId');
             queryList.push('zone.name = ?');
             valueList.push(queryObj.zoneName);
         }
         if (queryObj.categoryName) {
             tableList.push('category');
-            jsonConditions.push('song.categoryId = category.categoryId');
+            joinConditions.push('song.categoryId = category.categoryId');
             queryList.push('category.name = ?');
             valueList.push(queryObj.categoryName);
         }
         if (queryObj.authorName) {
             tableList.push('author');
-            jsonConditions.push('song.authorId = author.authorId');
+            joinConditions.push('song.authorId = author.authorId');
             queryList.push('author.name = ?');
             valueList.push(queryObj.authorName);
         }
@@ -400,7 +516,7 @@ class Song {
             sort = ' ASC';
         }
 
-        let query = 'SELECT *, artist.name as singer, author.name as author FROM ' + tableList.join(', ') + ' WHERE ' + jsonConditions.join(' AND ');
+        let query = 'SELECT song.* FROM ' + tableList.join(', ') + ' WHERE ' + joinConditions.join(' AND ');
         if (queryList.length === 0) {
             query += ' ORDER BY' + orderBy + sort + ' LIMIT ? OFFSET ?';
         } else {
@@ -411,15 +527,16 @@ class Song {
         console.log(query);
         console.log(valueList);
         pool.query(query, valueList, (err, results) => {
-            console.log(results);
             if (err) return callback(err);
+
             if (!results[0]) return callback(null, []);
-            return callback(null, results);
+
+            let result = [];
+            results.forEach((song, i) => {
+                result.push(new Song(song));
+            });
+            return callback(null, result);
         });
-
-
-
-
     }
 }
 

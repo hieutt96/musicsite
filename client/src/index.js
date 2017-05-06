@@ -47,7 +47,7 @@ ReactDOM.render(
 					<Route path="signup" component={Signup} />
 					<Route path="login" component={Login} />
 					<Route path="home" component={Home} />
-					<Route path="user" component={Dash} />
+					<Route path="user/:username" component={Dash} />
 					<Route path="song/:songId" component={SongPlayer} />
 					<Route path="video/:songId" component={VideoPlayer} />
 					<Route path="playlist/:playlistId" component={SongPlayer} />
